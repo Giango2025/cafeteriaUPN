@@ -4,15 +4,31 @@ namespace CafeteriaUPN_Evaluacion
 {
     internal class Program
     {
-        // Datos globales
         private static readonly string[] NOMBRES_COMBO = { "Café + Pan", "Jugo + Sándwich", "Menú Saludable" };
         private static readonly double[] PRECIOS_COMBO = { 5.50, 7.00, 10.00 };
         private const int MAX_RESERVAS = 20;
         private const int NUM_TURNOS = 2;
+        
+        // Matrices bidimensionales
+        private static string[,] reservas = new string[NUM_TURNOS, MAX_RESERVAS];
+        private static int[,] comboIndices = new int[NUM_TURNOS, MAX_RESERVAS];
 
         static void Main(string[] args)
         {
+            InicializarDatos();
             EjecutarMenu();
+        }
+
+        static void InicializarDatos()
+        {
+            for (int i = 0; i < NUM_TURNOS; i++)
+            {
+                for (int j = 0; j < MAX_RESERVAS; j++)
+                {
+                    reservas[i, j] = "LIBRE";
+                    comboIndices[i, j] = -1;
+                }
+            }
         }
 
         static void EjecutarMenu()
@@ -61,7 +77,7 @@ namespace CafeteriaUPN_Evaluacion
                         Console.WriteLine("Cerrando el sistema. ¡Adiós!");
                         break;
                     default:
-                        Console.WriteLine("Opción no válida. Intente de nuevo.");
+                        Console.WriteLine(" Opción no válida. Intente de nuevo.");
                         break;
                 }
                 
