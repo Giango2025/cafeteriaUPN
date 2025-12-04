@@ -76,7 +76,7 @@ namespace CafeteriaUPN_Evaluacion
                         Console.WriteLine("Cerrando el sistema. ¡Adiós!");
                         break;
                     default:
-                        Console.WriteLine(" Opción no válida. Intente de nuevo.");
+                        Console.WriteLine("Opción no válida. Intente de nuevo.");
                         break;
                 }
                 
@@ -127,7 +127,7 @@ namespace CafeteriaUPN_Evaluacion
                     reservas[fila, col] = nombre;
                     comboIndices[fila, col] = comboIndex;
                     string turnoStr = fila == 0 ? "Mañana" : "Tarde";
-                    Console.WriteLine($" Reserva registrada para {nombre} en turno {turnoStr}.");
+                    Console.WriteLine($"Reserva registrada para {nombre} en turno {turnoStr}.");
                     return;
                 }
             }
@@ -155,7 +155,7 @@ namespace CafeteriaUPN_Evaluacion
                     }
                 }
             }
-            Console.WriteLine($" Reserva de {nombre} no encontrada.");
+            Console.WriteLine($"Reserva de {nombre} no encontrada.");
         }
 
         static void ListarReservas()
@@ -193,7 +193,7 @@ namespace CafeteriaUPN_Evaluacion
                     {
                         int cIndex = comboIndices[fila, col];
                         string turnoStr = fila == 0 ? "Mañana" : "Tarde";
-                        Console.WriteLine("\n RESERVA ENCONTRADA:");
+                        Console.WriteLine(" RESERVA ENCONTRADA:");
                         Console.WriteLine($"- Turno: {turnoStr}");
                         Console.WriteLine($"- Combo: {NOMBRES_COMBO[cIndex]}");
                         Console.WriteLine($"- Precio: S/. {PRECIOS_COMBO[cIndex]:N2}");
