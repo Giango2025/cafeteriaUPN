@@ -9,7 +9,6 @@ namespace CafeteriaUPN_Evaluacion
         private const int MAX_RESERVAS = 20;
         private const int NUM_TURNOS = 2;
         
-        // Matrices bidimensionales
         private static string[,] reservas = new string[NUM_TURNOS, MAX_RESERVAS];
         private static int[,] comboIndices = new int[NUM_TURNOS, MAX_RESERVAS];
 
@@ -59,10 +58,10 @@ namespace CafeteriaUPN_Evaluacion
                         MostrarMenuCombos();
                         break;
                     case 2:
-                        Console.WriteLine("Función pendiente: Registrar Reserva");
+                        RegistrarReserva();
                         break;
                     case 3:
-                        Console.WriteLine("Función pendiente: Cancelar Reserva");
+                        CancelarReserva();
                         break;
                     case 4:
                         Console.WriteLine("Función pendiente: Listar Reservas");
@@ -77,7 +76,7 @@ namespace CafeteriaUPN_Evaluacion
                         Console.WriteLine("Cerrando el sistema. ¡Adiós!");
                         break;
                     default:
-                        Console.WriteLine(" Opción no válida. Intente de nuevo.");
+                        Console.WriteLine("Opción no válida. Intente de nuevo.");
                         break;
                 }
                 
@@ -97,6 +96,66 @@ namespace CafeteriaUPN_Evaluacion
             {
                 Console.WriteLine($"[{i + 1}] {NOMBRES_COMBO[i]} (S/. {PRECIOS_COMBO[i]:N2})");
             }
+        }
+
+        static void RegistrarReserva()
+        {
+            MostrarMenuCombos();
+            Console.Write("\nNombre del Estudiante: ");
+            string nombre = Console.ReadLine().Trim().ToUpper();
+            
+            Console.Write("Turno (1: Mañana | 2: Tarde): ");
+            if (!int.TryParse(Console.ReadLine(), out int turno) || turno < 1 || turno > NUM_TURNOS)
+            {
+                Console.WriteLine(" Turno no válido.");
+                return;
+            }
+            int fila = turno - 1;
+            
+            Console.Write("Combo a reservar [1, 2, 3...]: ");
+            if (!int.TryParse(Console.ReadLine(), out int combo) || combo < 1 || combo > NOMBRES_COMBO.Length)
+            {
+                Console.WriteLine(" Combo no válido.");
+                return;
+            }
+            int comboIndex = combo - 1;
+            
+            for (int col = 0; col < MAX_RESERVAS; col++)
+            {
+                if (reservas[fila, col] == "LIBRE")
+                {
+                    reservas[fila, col] = nombre;
+                    comboIndices[fila, col] = comboIndex;
+                    string turnoStr = fila == 0 ? "Mañana" : "Tarde";
+                    Console.WriteLine($" Reserva registrada para {nombre} en turno {turnoStr}.");
+                    return;
+                }
+            }
+            
+            Console.WriteLine($" El turno {(fila == 0 ? "Mañana" : "Tarde")} ha agotado su límite de {MAX_RESERVAS} reservas.");
+        }
+
+        static void CancelarReserva()
+        {
+            Console.Write("Nombre del Estudiante a Cancelar: ");
+            string nombre = Console.ReadLine().Trim().ToUpper();
+            
+            for (int fila = 0; fila < NUM_TURNOS; fila++)
+            {
+                for (int col = 0; col < MAX_RESERVAS; col++)
+                {
+                    if (reservas[fila, col] == nombre)
+                    {
+                        string comboNombre = NOMBRES_COMBO[comboIndices[fila, col]];
+                        reservas[fila, col] = "LIBRE";
+                        comboIndices[fila, col] = -1;
+                        string turnoStr = fila == 0 ? "Mañana" : "Tarde";
+                        Console.WriteLine($" Reserva de {nombre} (Combo: {comboNombre}) en Turno {turnoStr} ha sido cancelada.");
+                        return;
+                    }
+                }
+            }
+            Console.WriteLine($" Reserva de {nombre} no encontrada.");
         }
     }
 }
