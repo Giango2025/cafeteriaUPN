@@ -64,19 +64,19 @@ namespace CafeteriaUPN_Evaluacion
                         CancelarReserva();
                         break;
                     case 4:
-                        Console.WriteLine("Función pendiente: Listar Reservas");
+                        ListarReservas();
                         break;
                     case 5:
                         Console.WriteLine("Función pendiente: Reporte de Ingresos");
                         break;
                     case 6:
-                        Console.WriteLine("Función pendiente: Buscar Reserva");
+                        BuscarReservaPorNombre();
                         break;
                     case 0:
                         Console.WriteLine("Cerrando el sistema. ¡Adiós!");
                         break;
                     default:
-                        Console.WriteLine("Opción no válida. Intente de nuevo.");
+                        Console.WriteLine(" Opción no válida. Intente de nuevo.");
                         break;
                 }
                 
@@ -115,7 +115,7 @@ namespace CafeteriaUPN_Evaluacion
             Console.Write("Combo a reservar [1, 2, 3...]: ");
             if (!int.TryParse(Console.ReadLine(), out int combo) || combo < 1 || combo > NOMBRES_COMBO.Length)
             {
-                Console.WriteLine(" Combo no válido.");
+                Console.WriteLine("Combo no válido.");
                 return;
             }
             int comboIndex = combo - 1;
@@ -156,6 +156,57 @@ namespace CafeteriaUPN_Evaluacion
                 }
             }
             Console.WriteLine($" Reserva de {nombre} no encontrada.");
+        }
+
+        static void ListarReservas()
+        {
+            Console.WriteLine("--- LISTADO DE RESERVAS POR TURNO ---");
+            for (int fila = 0; fila < NUM_TURNOS; fila++)
+            {
+                string turnoStr = fila == 0 ? "MAÑANA" : "TARDE";
+                Console.WriteLine($"\n== TURNO {turnoStr} ==");
+                int count = 0;
+                for (int col = 0; col < MAX_RESERVAS; col++)
+                {
+                    if (reservas[fila, col] != "LIBRE")
+                    {
+                        int cIndex = comboIndices[fila, col];
+                        Console.WriteLine($"- Estudiante: {reservas[fila, col]} | Combo: {NOMBRES_COMBO[cIndex]} (S/. {PRECIOS_COMBO[cIndex]:N2})");
+                        count++;
+                    }
+                }
+                Console.WriteLine($"Total de reservas activas: {count} / {MAX_RESERVAS}");
+            }
+        }
+
+        static void BuscarReservaPorNombre()
+        {
+            Console.Write("Nombre del Estudiante a Buscar: ");
+            string nombre = Console.ReadLine().Trim().ToUpper();
+            bool encontrado = false;
+            
+            for (int fila = 0; fila < NUM_TURNOS; fila++)
+            {
+                for (int col = 0; col < MAX_RESERVAS; col++)
+                {
+                    if (reservas[fila, col] == nombre)
+                    {
+                        int cIndex = comboIndices[fila, col];
+                        string turnoStr = fila == 0 ? "Mañana" : "Tarde";
+                        Console.WriteLine("\n RESERVA ENCONTRADA:");
+                        Console.WriteLine($"- Turno: {turnoStr}");
+                        Console.WriteLine($"- Combo: {NOMBRES_COMBO[cIndex]}");
+                        Console.WriteLine($"- Precio: S/. {PRECIOS_COMBO[cIndex]:N2}");
+                        encontrado = true;
+                        return;
+                    }
+                }
+            }
+            
+            if (!encontrado)
+            {
+                Console.WriteLine($" Reserva de {nombre} no encontrada.");
+            }
         }
     }
 }
